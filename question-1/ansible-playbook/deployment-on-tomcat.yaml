@@ -1,0 +1,24 @@
+- hosts: test
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  vars:
+  - url_tomcat: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.86/bin/apache-tomcat-9.0.86.zip
+  tasks:
+    - name: install java8
+      action: yum pkg=java-1.8.0-openjdk-devel.x86_64 state=present
+    - name: download tomcat9
+      action: get_url url="{{url_tomcat}}" dest=/home/ansible
+    - name: Unarchive a file that is already on the remote machine
+      unarchive:
+        src: /home/ansible/apache-tomcat-9.0.86.zip
+        dest: /home/ansible
+        remote_src: yes
+    - name: permission to apache server
+      command: chmod -R 777 /home/ansible/apache-tomcat-9.0.86
+    - name: to start apache-tomcat server
+      command: nohup /home/ansible/apache-tomcat-9.0.86/bin/startup.sh
+    - name: deployement of war on tomcat
+      action: copy src=/root/ansible-playbook/sample.war dest=/home/ansible/apache-tomcat-9.0.86/webapps

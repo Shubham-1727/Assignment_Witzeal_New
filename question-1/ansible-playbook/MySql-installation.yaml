@@ -1,0 +1,10 @@
+- hosts: test
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+
+  tasks:
+    - name: MySql installation 
+      yum: pkg=mysql state=present

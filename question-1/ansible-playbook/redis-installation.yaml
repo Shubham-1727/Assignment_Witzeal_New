@@ -1,0 +1,14 @@
+- hosts: test
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+
+  tasks:
+    - name: EPEL
+      command: amazon-linux-extras install epel -y
+    - name: Redis
+      command: sudo amazon-linux-extras install redis6 -y
+    - name: service redis start
+      command: sudo systemctl start redis

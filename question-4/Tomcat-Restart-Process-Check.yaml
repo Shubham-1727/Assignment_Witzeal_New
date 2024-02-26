@@ -1,0 +1,13 @@
+- name: Restart Tomcat and check processes
+  hosts: test
+  become: yes
+
+  tasks:
+    - name: Restart Tomcat
+      command: nohup /home/ansible/apache-tomcat-9.0.86/bin/startup.sh
+    - name: Check if Tomcat process is running
+      shell: ps aux | grep -v grep | grep tomcat
+      register: tomcat_process
+
+    - name: Print top 10 running processes
+      command: top -b -n 1 | head -n 17
